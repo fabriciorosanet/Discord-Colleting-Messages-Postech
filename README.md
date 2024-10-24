@@ -84,3 +84,4 @@ Este projeto é um bot para Discord que coleta mensagens de canais de texto, thr
       </a>
     </td>
 </table>
+

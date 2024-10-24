@@ -5,14 +5,14 @@ from pytz import timezone
 from datetime import datetime
 from dotenv import load_dotenv
 import os
-from pymongo import MongoClient  # Importa o MongoDB client
+from pymongo import MongoClient  
 
 load_dotenv()  
 
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')  
 MONGODB_URI = os.getenv('MONGODB_URI')  
 DATABASE_NAME = 'discord_bot'  
-COLLECTION_NAME = 'mensagem-dos-servidores'  
+COLLECTION_NAME = 'mensagem-dos-servidores-01.10-a-24.10'  
 
 client = MongoClient(MONGODB_URI)
 db = client[DATABASE_NAME]
@@ -35,7 +35,7 @@ async def on_ready():
             print(guild.name)
 
             for channel in guild.text_channels:
-                async for message in channel.history(after=datetime.fromisoformat('2024-10-23')):
+                async for message in channel.history(after=datetime.fromisoformat('2024-10-01')):
 
                     messages_data.append({
                         "Message": message.content,
@@ -49,7 +49,7 @@ async def on_ready():
                     })
 
                 for thread in channel.threads:
-                    async for message in thread.history(after=datetime.fromisoformat('2024-10-23')):
+                    async for message in thread.history(after=datetime.fromisoformat('2024-10-01')):
 
                         messages_data.append({
                             "Message": message.content,
@@ -64,7 +64,7 @@ async def on_ready():
 
             for forum in guild.forums:
                 for thread in forum.threads:
-                    async for message in thread.history(after=datetime.fromisoformat('2024-10-23')):
+                    async for message in thread.history(after=datetime.fromisoformat('2024-10-01')):
 
                         messages_data.append({
                             "Message": message.content,

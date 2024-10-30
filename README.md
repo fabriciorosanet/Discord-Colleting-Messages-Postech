@@ -1,8 +1,7 @@
+![image](https://github.com/user-attachments/assets/04aa3006-09bb-4ec5-abb0-5bb7ccca0366)
 
-![image](https://github.com/user-attachments/assets/9a5e47e3-8a2f-4e11-bd09-073d59ff8c08)
 
-
-# Discord Bot for Collecting Messages
+# Discord Bot for Collecting Messages - CHANNELS ID
 
 Este projeto é um bot para Discord que coleta mensagens de canais de texto, threads e fóruns de um servidor e armazena essas informações em um banco de dados MongoDB.
 

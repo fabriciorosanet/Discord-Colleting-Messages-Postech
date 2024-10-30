@@ -3,12 +3,9 @@
 
 Este projeto é um bot para Discord que coleta mensagens de canais de texto, threads e fóruns de um servidor e armazena essas informações em um banco de dados MongoDB.
 
-## Funcionalidades
+## Nova funcionalidade adicionada
 
-- Coleta de mensagens de canais de texto, threads e fóruns.
-- Armazenamento das mensagens coletadas em um banco de dados MongoDB.
-- Suporte para fusos horários (com `pytz`).
-- Registro de informações detalhadas sobre as mensagens, como autor, data e canal.
+✨Agora o bot pode extrair mensagens de um único canal de **forum** e armazenar essas mensagens em uma collection no banco de dados MongoDB, facilitando a análise de dados e o monitoramento das conversas.
 
 ## Requisitos
 

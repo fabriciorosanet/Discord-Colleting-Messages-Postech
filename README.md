@@ -69,12 +69,4 @@ Este projeto é um bot para Discord que coleta mensagens de canais de texto, thr
         </sub>
       </a>
     </td>
-    <td align="center">
-      <a href="#">
-        <img src="https://media.licdn.com/dms/image/v2/D4E03AQGi_MKVj3IA5Q/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1718247588625?e=1735171200&v=beta&t=lrjO5njNVwsJQfyTMU_hkemv59cTfZxhGE6rNgCstxI" width="100px;" alt="Eduardo Bortoli"/><br>
-        <sub>
-          <b>Gabrielle Rosa</b>
-        </sub>
-      </a>
-    </td>
-</table>
+ 

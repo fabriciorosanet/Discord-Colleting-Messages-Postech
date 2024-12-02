@@ -55,7 +55,7 @@ Este projeto é um bot para Discord que coleta mensagens de canais de texto, thr
   <tr>
     <td align="center">
       <a href="#">
-        <img src="https://media.licdn.com/dms/image/v2/D4D03AQFhg6aT98EYyQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1697061290400?e=1735171200&v=beta&t=I7QymWDGwsoAsobMDPcCba6KiP3cvSA8LnWUF2G9nzU" width="100px;" alt="Fabricio Rosa"/><br>
+        <img src="https://media.licdn.com/dms/image/v2/D4D03AQGBx3C-ojHIHA/profile-displayphoto-shrink_200_200/B4DZODqTlhHcAc-/0/1733080726338?e=1738800000&v=beta&t=WrvetVRh35RfwSTe3LGSh7RQoPzLbxr3TE6p2dllYU4" width="100px;" alt="Fabricio Rosa"/><br>
         <sub>
           <b>Fabrício Rosa</b>
         </sub>

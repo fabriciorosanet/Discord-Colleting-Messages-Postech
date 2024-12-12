@@ -5,87 +5,113 @@ from pytz import timezone
 from datetime import datetime
 from dotenv import load_dotenv
 import os
-from pymongo import MongoClient  # Importa o MongoDB client
+from pymongo import MongoClient
+import sys
 
-load_dotenv()  
+load_dotenv()
 
-DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')  
-MONGODB_URI = os.getenv('MONGODB_URI')  
-DATABASE_NAME = 'discord_bot'  
-COLLECTION_NAME = 'mensagem-dos-servidores'  
+DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
+MONGO_URI = os.getenv('MONGO_URI')
 
-client = MongoClient(MONGODB_URI)
+# Leitura das datas de início e fim
+START_DATE_STR = os.getenv('START_DATE', '2023-01-01')
+END_DATE_STR = os.getenv('END_DATE', '2023-12-31')
+
+# Converte as strings de data no formato YYYY-MM-DD para objetos datetime
+start_date = datetime.strptime(START_DATE_STR, '%Y-%m-%d')
+end_date = datetime.strptime(END_DATE_STR, '%Y-%m-%d')
+
+DATABASE_NAME = 'discord_bot-2024'
+COLLECTION_NAME = 'mensagem-dos-servidores'
+
+client = MongoClient(MONGO_URI)
 db = client[DATABASE_NAME]
 collection = db[COLLECTION_NAME]
 
-intents = discord.Intents.all()  
-bot = commands.Bot(command_prefix='!', intents=intents)  
+intents = discord.Intents.all()
+bot = commands.Bot(command_prefix='!', intents=intents)
 
-messages_data = []  
-
-
+messages_data = []
 saopaulo_tz = timezone('America/Sao_Paulo')
 
 @bot.event
 async def on_ready():
     try:
         print(f'Logged in as {bot.user.name}')
+        print(f'Coletando mensagens entre {start_date} e {end_date}')
 
         for guild in bot.guilds:
-            print(guild.name)
+            print(f"Coletando mensagens do servidor: {guild.name}")
 
             for channel in guild.text_channels:
-                async for message in channel.history(after=datetime.fromisoformat('2024-10-23')):
+                # Histórico do canal no intervalo de datas
+                async for message in channel.history(after=start_date, before=end_date):
+                    if isinstance(message.author, discord.Member):
+                        role_name = message.author.top_role.name if message.author.top_role else "None"
+                    else:
+                        role_name = "None"
 
                     messages_data.append({
                         "Message": message.content,
-                        "Message Datetime": message.created_at.astimezone(saopaulo_tz),  
+                        "Message Datetime": message.created_at.astimezone(saopaulo_tz),
                         "User": message.author.name,
-                        "Role": message.author.top_role.name if hasattr(message.author, 'top_role') else "None",
+                        "Role": role_name,
                         "Channel": channel.name,
                         "Thread": "None",
                         "Server Name": guild.name,
                         "Category": channel.category.name if channel.category is not None else "None"
                     })
 
+                # Histórico das threads do canal no intervalo de datas
                 for thread in channel.threads:
-                    async for message in thread.history(after=datetime.fromisoformat('2024-10-23')):
+                    async for message in thread.history(after=start_date, before=end_date):
+                        if isinstance(message.author, discord.Member):
+                            role_name = message.author.top_role.name if message.author.top_role else "None"
+                        else:
+                            role_name = "None"
 
                         messages_data.append({
                             "Message": message.content,
                             "Message Datetime": message.created_at.astimezone(saopaulo_tz),
                             "User": message.author.name,
-                            "Role": message.author.top_role.name if hasattr(message.author, 'top_role') else "None",
+                            "Role": role_name,
                             "Channel": channel.name,
                             "Thread": thread.name,
                             "Server Name": guild.name,
                             "Category": channel.category.name if channel.category is not None else "None"
                         })
 
-            for forum in guild.forums:
-                for thread in forum.threads:
-                    async for message in thread.history(after=datetime.fromisoformat('2024-10-23')):
+            # Histórico de fóruns (nem todo servidor possui)
+            if hasattr(guild, 'forums') and guild.forums:
+                for forum in guild.forums:
+                    for thread in forum.threads:
+                        async for message in thread.history(after=start_date, before=end_date):
+                            if isinstance(message.author, discord.Member):
+                                role_name = message.author.top_role.name if message.author.top_role else "None"
+                            else:
+                                role_name = "None"
 
-                        messages_data.append({
-                            "Message": message.content,
-                            "Message Datetime": message.created_at.astimezone(saopaulo_tz),
-                            "User": message.author.name,
-                            "Role": message.author.top_role.name if hasattr(message.author, 'top_role') else "None",
-                            "Channel": forum.name,
-                            "Thread": thread.name,
-                            "Server Name": guild.name,
-                            "Category": forum.category.name if forum.category is not None else "None"
-                        })
+                            messages_data.append({
+                                "Message": message.content,
+                                "Message Datetime": message.created_at.astimezone(saopaulo_tz),
+                                "User": message.author.name,
+                                "Role": role_name,
+                                "Channel": forum.name,
+                                "Thread": thread.name,
+                                "Server Name": guild.name,
+                                "Category": forum.category.name if forum.category is not None else "None"
+                            })
 
-        
         if messages_data:
             collection.insert_many(messages_data)
             print(f'{len(messages_data)} mensagens foram inseridas no MongoDB.')
 
-        exit()
+        await bot.close()
+        sys.exit(0)
 
     except Exception as e:
         print(f'Ocorreu um erro: {e}')
-        exit()
+        await bot.close()
+        sys.exit(1)
 
 bot.run(DISCORD_TOKEN)

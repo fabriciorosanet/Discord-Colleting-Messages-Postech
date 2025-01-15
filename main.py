@@ -11,20 +11,20 @@ import sys
 load_dotenv()
 
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
-MONGO_URI = os.getenv('MONGO_URI')
+MONGODB_URI = os.getenv('MONGODB_URI')
 
 # Leitura das datas de início e fim
-START_DATE_STR = os.getenv('START_DATE', '2023-01-01')
-END_DATE_STR = os.getenv('END_DATE', '2023-12-31')
+START_DATE_STR = os.getenv('START_DATE', '2024-01-01')
+END_DATE_STR = os.getenv('END_DATE', '2024-12-31')
 
 # Converte as strings de data no formato YYYY-MM-DD para objetos datetime
 start_date = datetime.strptime(START_DATE_STR, '%Y-%m-%d')
 end_date = datetime.strptime(END_DATE_STR, '%Y-%m-%d')
 
 DATABASE_NAME = 'discord_bot-2024'
-COLLECTION_NAME = 'mensagem-dos-servidores'
+COLLECTION_NAME = '2024-01-01 a 2024-12-31'
 
-client = MongoClient(MONGO_URI)
+client = MongoClient(MONGODB_URI)
 db = client[DATABASE_NAME]
 collection = db[COLLECTION_NAME]
 
